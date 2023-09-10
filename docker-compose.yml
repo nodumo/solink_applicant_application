@@ -1,0 +1,83 @@
+#      ___   ________  _________   _____                      _ __
+#    /   | / ____/  |/  / ____/  / ___/___  _______  _______(_) /___  __
+#   / /| |/ /   / /|_/ / __/     \__ \/ _ \/ ___/ / / / ___/ / __/ / / /
+#  / ___ / /___/ /  / / /___    ___/ /  __/ /__/ /_/ / /  / / /_/ /_/ /
+# /_/  |_\____/_/  /_/_____/   /____/\___/\___/\__,_/_/  /_/\__/\__, /
+#                                                             /____/
+#  Solink Inc. Candidate sample application.
+#  Protecting customers since 2023.
+#  Nickanor Odumo
+#  Mastermould Technology Solutions Inc.
+#  +1 613-581-1765 | services@nickodumo.com | Ottawa, Ontario
+version: '3.7'
+services:
+    # Storing the application state in Postgres for convenience
+    acme-security-statestore-postgres:
+        image: postgres:14.1-alpine
+        container_name: 'acme-security-statestore-postgres'
+        hostname: 'acme-security-statestore-postgres'
+        restart: always
+        env_file: './.env.dev'
+        ports:
+            - '5432:5432'
+        volumes:
+            - ./dockerdata/postgres:/var/lib/postgresql/data
+    # Development process for seeding the application database (runs migrations in a loop when changed)
+    acme-security-server-executor:
+        image: 'flyway/flyway'
+        container_name: 'acme-security-server-executor'
+        command: "migrate"
+        depends_on:
+            - acme-security-statestore-postgres
+        restart: always
+        env_file: './.env.dev'
+        working_dir: '/flyway'
+        links:
+            - acme-security-statestore-postgres
+        volumes:
+            - './flyway/conf:/flyway/conf'
+            - './flyway/sql:/flyway/sql'
+    # Backend REST API service
+    acme-security-backend-api:
+      image: 'node:16.2.0-alpine'
+      container_name: 'acme-security-backend-api'
+      command: 'npm run run_acme_security_backend_api'
+      depends_on:
+        - acme-security-statestore-postgres
+      env_file: './.env.dev'
+      working_dir: '/app'
+      volumes:
+        - './:/app'
+      ports:
+        - '3000:3000'
+      links:
+        - acme-security-statestore-postgres
+    # Backend worker service for generating application events
+    acme-security-backend-event-creator:
+      image: 'node:16.2.0-alpine'
+      container_name: 'acme-security-backend-event-creator'
+      command: 'npm run run_acme_security_backend_event_creator'
+      depends_on:
+        - acme-security-statestore-postgres
+      env_file: './.env.dev'
+      working_dir: '/app'
+      volumes:
+        - './:/app'
+      links:
+        - acme-security-statestore-postgres
+    # Frontend service for serving application UI
+    acme-security-frontend-client:
+        build:
+          dockerfile: ./Dockerfile
+        container_name: 'acme-security-frontend-client'
+        command: 'npm run run_acme_security_frontend_client'
+        depends_on:
+            - acme-security-statestore-postgres
+        env_file: './.env.dev'
+        working_dir: '/app'
+        volumes:
+            - './:/app'
+        ports:
+            - '4200:4200'
+        links:
+            - acme-security-statestore-postgres
