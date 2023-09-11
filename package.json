@@ -1,11 +1,11 @@
 {
   "name": "@acme-security/source",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "run_acme_security_frontend_client": "",
-    "run_acme_security_backend_api": "",
-    "run_acme_security_backend_event_creator": ""
+    "run_acme_security_frontend_client": "nx serve apps/frontend-client",
+    "run_acme_security_backend_api": "nx serve apps/backend-api",
+    "run_acme_security_backend_event_creator": "nx serve apps/backend-event-creator"
   },
   "private": true,
   "dependencies": {
@@ -17,14 +17,19 @@
     "@angular/platform-browser": "~16.0.0",
     "@angular/platform-browser-dynamic": "~16.0.0",
     "@angular/router": "~16.0.0",
+    "@mikro-orm/core": "^5.8.0",
+    "@mikro-orm/nestjs": "^5.2.1",
+    "@mikro-orm/postgresql": "^5.8.0",
     "@nestjs/common": "^9.1.1",
     "@nestjs/core": "^9.1.1",
     "@nestjs/platform-express": "^9.1.1",
     "@nrwl/angular": "^16.3.2",
     "axios": "^1.0.0",
+    "mikro-orm": "^5.8.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0",
+    "uuid": "^9.0.0",
     "zone.js": "~0.13.0"
   },
   "devDependencies": {
@@ -53,6 +58,7 @@
     "@schematics/angular": "~16.0.0",
     "@types/jest": "^29.4.0",
     "@types/node": "~18.7.1",
+    "@types/uuid": "^9.0.3",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
     "cypress": "^13.0.0",

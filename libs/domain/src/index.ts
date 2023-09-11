@@ -1,3 +1,3 @@
 export * from './lib/domain.module';
-export * from './lib/repository.interface';
-export * from './lib/usecase.interface';
+export * from './lib/repositories/repository.interface';
+export * from './lib/services/usecase.interface';

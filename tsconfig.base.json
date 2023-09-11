@@ -22,12 +22,6 @@
       "@acme-security/domain": ["libs/domain/src/index.ts"],
       "@acme-security/dtos": ["libs/dtos/src/index.ts"],
       "@acme-security/frontend-core-ui": ["libs/frontend-core-ui/src/index.ts"],
-      "@acme-security/frontend-feature-admin": [
-        "libs/frontend-feature-admin/src/index.ts"
-      ],
-      "@acme-security/frontend-http-client": [
-        "libs/frontend-http-client/src/index.ts"
-      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
