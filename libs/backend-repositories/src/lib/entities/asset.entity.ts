@@ -1,7 +1,11 @@
 import {BaseEntity} from "./base-entity.entity";
-import {Property} from "@mikro-orm/core";
+import {Entity, Property} from "@mikro-orm/core";
+import {AssetI} from "@acme-security/domain";
 
-export class Asset extends BaseEntity {
+@Entity({
+  tableName: 'assets'
+})
+export class Asset extends BaseEntity implements AssetI {
   @Property({type: 'text'})
   name = ''
 
